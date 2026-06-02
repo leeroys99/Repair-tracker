@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Quote Request</title>
+</head>
+
+<body>
+
+    <h1>Quote/Ticket Request #{{ quote.id }}</h1>
+
+    <p><strong>Customer:</strong> {{ quote.customer_name }}</p>
+    <p><strong>Phone:</strong> {{ quote.customer_phone }}</p>
+    <p><strong>Email:</strong> {{ quote.customer_email }}</p>
+    <p><strong>Device:</strong> {{ quote.device_type }}</p>
+    <p><strong>Status:</strong> {{ quote.status }}</p>
+    <p><strong>Created:</strong> {{ quote.created_at }}</p>
+
+    <h2>Problem Description</h2>
+    <p>{{ quote.issue }}</p>
+
+    <form method="POST" action="/convert-quote/{{ quote.id }}">
+    <button type="submit">Create Repair Ticket</button></form>
+
+    <br>
+
+    <a href="/dashboard"><button>Back to Tickets</button></a>
+
+</body>
+</html>

@@ -107,6 +107,42 @@
     <button class="create-button">Create New Ticket</button>
     </a>
 
+
+    <!-- TICKET/QUOTE SUBMIT -->
+
+
+<h2>Quote/Ticket Requests</h2>
+
+{% if quote_requests %}
+<table class="ticket-table">
+    <tr>
+        <th>Request/Ticket</th>
+        <th>Customer</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Device</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>View</th>
+    </tr>
+
+    {% for request in quote_requests %}
+    <tr>
+        <td>#{{ request.id }}</td>
+        <td>{{ request.customer_name }}</td>
+        <td>{{ request.customer_phone }}</td>
+        <td>{{ request.customer_email }}</td>
+        <td>{{ request.device_type }}</td>
+        <td>{{ request.status }}</td>
+        <td>{{ request.created_at }}</td>
+        <td><a href="/quote/{{ request.id }}">View</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No quote requests yet.</p>
+{% endif %}
+
 <script>
 
 

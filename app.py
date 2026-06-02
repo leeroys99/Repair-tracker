@@ -38,9 +38,13 @@ def dashboard():
         cursor.execute("SELECT * FROM tickets")
 
     tickets = cursor.fetchall()
+    
+    cursor.execute("SELECT * FROM quote_requests ORDER BY id DESC")
+    quote_requests = cursor.fetchall()
+    
     connection.close()
 
-    return render_template("dashboard.html", tickets=tickets, search=search)
+    return render_template("dashboard.html", tickets=tickets, quote_requests=quote_requests, search=search)
 
 
 	#TICKETTABLE#
@@ -250,6 +254,65 @@ def quote_request():
     <p>Thank you! We'll review your request and call you back with a possible quote.</p>
     <a href="/">Back to Home</a>
     """
+
+
+#QUOTE TABLE#
+
+
+@app.route("/quote/<int:quote_id>")
+def quote_detail(quote_id):
+    connection = sqlite3.connect("tickets.db")
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM quote_requests WHERE id = ?", (quote_id,))
+    quote = cursor.fetchone()
+
+    connection.close()
+
+    return render_template("quote.html", quote=quote)
+
+
+#QUOTE TO TICKET#
+
+
+@app.route("/convert-quote/<int:quote_id>", methods=["POST"])
+def convert_quote(quote_id):
+
+    connection = sqlite3.connect("tickets.db")
+    connection.row_factory = sqlite3.Row
+    cursor = connection.cursor()
+
+    cursor.execute("SELECT * FROM quote_requests WHERE id = ?",(quote_id,))
+    quote = cursor.fetchone()
+    
+    cursor.execute("""
+    INSERT INTO tickets (
+        customer_name,
+        customer_phone,
+        customer_email,
+        device_type,
+        issue,
+        technician_notes,
+        status
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    """, (
+        quote["customer_name"],
+        quote["customer_phone"],
+        quote["customer_email"],
+        quote["device_type"],
+        quote["issue"],
+        "",
+        "Needs Diagnostics"
+    ))
+    
+    cursor.execute("DELETE FROM quote_requests WHERE id = ?", (quote_id,))
+
+    connection.commit()
+    connection.close()
+
+    return redirect("/dashboard")
 
 
 if __name__ == "__main__":
