@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Edit Ticket</title>
+</head>
+
+<body>
+
+    <h1>Edit Ticket #{{ ticket.id }}</h1>
+
+    <form method="POST">
+
+
+        <h2>Customer Info</h2>
+
+        <label>Customer Phone:</label>
+        <input type="text" name="customer_phone" value="{{ ticket.customer_phone }}">
+
+        <label>Customer Email:</label>
+        <input type="email" name="customer_email" value="{{ ticket.customer_email }}">
+
+<br><br>
+
+
+        <h2>Status</h2>
+
+        <select name="status">
+
+            <option value="Needs Diagnostics"
+                {% if ticket.status == "Needs Diagnostics" %}selected{% endif %}>
+                Needs Diagnostics
+            </option>
+
+            <option value="Diagnosing"
+                {% if ticket.status == "Diagnosing" %}selected{% endif %}>
+                Diagnosing
+            </option>
+
+            <option value="Waiting on Parts"
+                {% if ticket.status == "Waiting on Parts" %}selected{% endif %}>
+                Waiting on Parts
+            </option>
+
+            <option value="Repair In Progress"
+                {% if ticket.status == "Repair In Progress" %}selected{% endif %}>
+                Repair In Progress
+            </option>
+
+            <option value="Ready for Pickup"
+                {% if ticket.status == "Ready for Pickup" %}selected{% endif %}>
+                Ready for Pickup
+            </option>
+
+            <option value="Completed"
+                {% if ticket.status == "Completed" %}selected{% endif %}>
+                Completed
+            </option>
+
+        </select>
+
+
+        <!-- EDIT TICKET OPTIONS -->
+
+
+        <h2>Technician Notes</h2>
+
+        <textarea name="technician_notes" rows="8" cols="50">{{ ticket.technician_notes }}</textarea>
+
+        <h2>Pricing</h2>
+
+        <label>Parts Cost:</label>
+        <input type="number" step="0.01" name="parts_cost" value="{{ ticket.parts_cost }}">
+
+        <br><br>
+
+        <label>Labor Cost:</label>
+        <input type="number" step="0.01" name="labor_cost" value="{{ ticket.labor_cost }}">
+
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+
+    </form>
+
+    <br>
+
+    <br><br>
+
+
+<br><br>
+
+
+    <a href="/ticket/{{ ticket.id }}">Back to Ticket</a>
+
+
+</body>
+
+</html>

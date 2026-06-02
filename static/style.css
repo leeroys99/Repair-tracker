@@ -1,0 +1,245 @@
+/* FONT STYLE*/
+
+
+h1, h2 {
+    font-family: 'Orbitron', sans-serif;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+
+/* DASHBOARD BUTTON */
+
+
+.top-nav {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+
+/* PAGE COLORS*/
+
+
+body {
+    background-color: #0a0a0a;
+    color: white;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+h1 {
+    color: #008cff;
+}
+
+h2 {
+    color: #008cff;
+}
+
+button {
+    background-color: #008cff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #008cff;
+}
+
+a {
+    color: #008cff;
+}
+
+p {
+    background-color: #080808;
+    padding: 12px;
+    border-radius: 10px;
+    border-left: 4px solid #008cff;
+}
+
+
+/* HOMEPAGE SECTIONS */
+
+
+.hero-section,
+.home-section {
+    background-color: #101010;
+    border: 1px solid #00ffcc;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    max-width: 900px;
+}
+
+.hero-section h1 {
+    font-size: 36px;
+}
+
+.home-section {
+    border-left: 5px solid #0099ff;
+}
+
+
+/* TICKET TABLE*/
+
+
+.ticket-table {
+    width: 100%;
+    max-width: 900px;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #101010;
+    border: 1px solid #0099ff;
+}
+
+.ticket-table th,
+.ticket-table td {
+    padding: 16px 18px;
+    vertical-align: middle;
+}
+
+.ticket-table th {
+    color: #00ffcc;
+    background-color: #050505;
+}
+
+.ticket-table tr:hover {
+    background-color: #181818;
+}
+
+.create-button {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.back-link {
+    display: block;
+    margin-top: 20px;
+}
+
+
+/*TABLE FORMAT/CENTER*/
+/*PHONE# SPACING*/
+
+
+.ticket-table th:nth-child(3),
+.ticket-table td:nth-child(3) {
+    min-width: 130px;
+    white-space: nowrap;
+}
+
+td:nth-child(4),
+td:nth-child(5),
+td:nth-child(6),
+th:nth-child(4),
+th:nth-child(5),
+th:nth-child(6) {
+    text-align: center;
+}
+
+
+/*DELETE BUTTON AREA*/
+
+
+.delete-form {
+    margin-top: 15px;
+}
+
+
+/*STATUS COLOR*/
+
+
+.status {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.needs-diagnostics {
+    background-color: #ff3b3b;
+    color: white;
+}
+
+.diagnosing {
+    background-color: #ff9900;
+    color: black;
+}
+
+.waiting-on-parts {
+    background-color: #ffd000;
+    color: black;
+}
+
+.repair-in-progress {
+    background-color: #0099ff;
+    color: white;
+}
+
+.ready-for-pickup {
+    background-color: #00ffcc;
+    color: black;
+}
+
+.completed {
+    background-color: #33cc66;
+    color: black;
+}
+
+
+/*AUTHORIZED ACCESS NOTIF*/
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 999;
+}
+
+.modal-box {
+    background-color: #101010;
+    border: 1px solid #00ffcc;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+}
+
+
+/*TICKET BUTTONS*/
+.ticket-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.ticket-actions form {
+    margin: 0;
+}
+
+
+/*DROP DOWN/QUOTE*/
+#quoteForm {
+    display: none;
+}
+
+#quoteForm.show {
+    display: block;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Ticket Details</title>
+</head>
+
+<body>
+
+    <h1>Ticket #{{ ticket.id }}</h1>
+
+    <p><strong>Customer:</strong> {{ ticket.customer_name }}</p>
+    <p><strong>Phone:</strong> {{ ticket.customer_phone }}</p>
+    <p><strong>Email:</strong> {{ ticket.customer_email }}</p>
+    <p><strong>Device:</strong> {{ ticket.device_type }}</p>
+    <p><strong>Status:</strong> {{ ticket.status }}</p>
+    <p><strong>Created:</strong> {{ ticket.created_at }}</p>
+
+    <h2>Customer Issue</h2>
+    <p>{{ ticket.issue }}</p>
+
+    <h2>Technician Notes</h2>
+    <p>{{ ticket.technician_notes }}</p>
+
+    <h2>Pricing</h2>
+
+    <p><strong>Parts Cost:</strong> ${{ "%.2f"|format(ticket.parts_cost) }}</p>
+    <p><strong>Labor Cost:</strong> ${{ "%.2f"|format(ticket.labor_cost) }}</p>
+    <p><strong>Total Cost:</strong> ${{ "%.2f"|format(ticket.total_cost) }}</p>
+
+    <br><br>
+
+
+
+<div class="ticket-actions">
+
+
+    <!-- EDIT BUTTON -->
+
+
+    <a href="/ticket/{{ ticket.id }}/edit">
+        <button>Edit Ticket</button>
+    </a>
+
+
+    <!-- PRINT BUTTON -->
+
+
+    <a href="/ticket/{{ ticket.id }}/print">
+        <button>Print Ticket</button>
+    </a>
+
+
+    <!-- DELETE BUTTON -->
+
+
+    <form class="delete-form"
+          action="/ticket/{{ ticket.id }}/delete"
+          method="POST">
+
+        <button type="submit"
+            onclick="return confirm('Are you sure you want to delete this ticket?');">
+
+            Delete Ticket
+
+        </button>
+
+    </form>
+
+</div>
+
+
+<!-- BACK TO DASHBOARD BUTTON-->
+
+
+<a class="back-link" href="/dashboard">
+    Back to Dashboard
+</a>
+
+</body>
+</html>

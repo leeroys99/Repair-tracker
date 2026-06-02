@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Create Ticket</title>
+</head>
+<body>
+
+    <h1>Create New Repair Ticket</h1>
+
+    <form method="POST">
+        <p>
+            Customer Name:
+            <input type="text" name="customer_name"
+        </p>
+
+        <p>
+            Customer Phone #:
+            <input type="text" name="customer_phone" 
+        </p>
+
+        <p>
+            Customer Email:
+            <input type="email" name="customer_email">
+        </p>
+
+        <p>
+            Device type:
+            <input type="text" name="device_type"
+        </p>
+
+        <p>
+            Customer Issue:
+            <textarea name="issue"></textarea>
+        </p>
+
+        <p>
+            Technician Notes:
+            <textarea name="technician_notes"></textarea>
+        </p>
+
+        <button type="submit">Save Ticket</button>
+    </form method="POST">
+
+    <br>
+
+
+<br><br>
+
+<a class="back-link" href="/dashboard">
+    Back to Dashboard
+</a>
+
+</body>
+</html>

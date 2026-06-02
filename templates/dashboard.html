@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Leeroy's Repair Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+
+    <div id="access-modal" class="modal-overlay">
+    <div class="modal-box">
+        <h2>Authorized Access Only</h2>
+        <p>DO YOU HAVE AUTHORIZED PERMISSION TO ACCESS?</p>
+        <button onclick="closeModal()">Yes, Access System</button>
+
+
+    </div>
+</div>
+
+<a class="back-link" href="/">
+    Back to Home
+</a>
+
+
+    <h1 style="color:rgb(10, 235, 85);"> Leeroy's Repair Tracker!</h1>
+
+    <hr>
+
+    <h2>Active Repair Tickets</h2>
+
+
+<form method="GET" action="/dashboard">
+    <input type="text" name="search" placeholder="Search tickets..." value="{{ search }}">
+    <button type="submit">Search</button>
+</form>
+
+
+    <!-- SEARCH BUTTON -->
+
+
+<a href="/dashboard">
+    <button>Clear</button>
+</a>
+
+
+{% if search %}
+    <p>
+        Showing results for: <strong>{{ search }}</strong>
+        <a href="/dashboard">Clear Search</a>
+    </p>
+{% endif %}
+
+
+    <!-- TICKET TABLE/HEADERS -->
+
+
+{% if tickets %}
+<table class="ticket-table">
+    <tr>
+        <th>Ticket</th>
+        <th>Customer</th>
+        <th>Phone</th>
+        <th>Device</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Total</th>
+        <th>View</th>
+    </tr>
+
+    {% for ticket in tickets %}
+    <tr>
+        <td>#{{ ticket.id }}</td>
+        <td>{{ ticket.customer_name }}</td>
+        <td>{{ ticket.customer_phone }}</td>
+        <td>{{ ticket.device_type }}</td>
+        <td>
+            <span class="status {{ ticket.status|lower|replace(' ', '-') }}">
+        {{ ticket.status }}
+        <td>{{ ticket.created_at }}</td>
+        <td>${{ "%.2f"|format(ticket.total_cost) }}</td>
+    </span>
+</td>
+        <td>
+            <a class="view-button" href="/ticket/{{ ticket.id }}">View</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p>Waiting for repair tickets.</p>
+{% endif %}
+
+    <a href="/create">
+    <button class="create-button">Create New Ticket</button>
+    </a>
+
+<script>
+
+
+  const accessModal = document.getElementById("access-modal");
+    const accessTime = localStorage.getItem("accessGrantedTime");
+    const currentTime = new Date().getTime();
+
+    const accessDuration = 30 * 60 * 1000; // 30 minutes
+
+    if (accessTime && currentTime - accessTime < accessDuration) {
+        accessModal.style.display = "none";
+    }
+
+    function closeModal() {
+        localStorage.setItem("accessGrantedTime", currentTime);
+        accessModal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>
