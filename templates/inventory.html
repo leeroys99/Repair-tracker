@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Inventory</title>
+</head>
+
+<body>
+
+    <h1>Lee's Inventory</h1>
+
+
+    <form method="POST" action="/add-inventory">
+
+    <p>
+        Item Name:
+        <input type="text" name="item_name" required>
+    </p>
+
+    <p>
+        Quantity:
+        <input type="number" name="quantity" value="0" required>
+    </p>
+
+   
+    <button type="submit">Add Item/s</button>
+
+</form>
+
+
+    <a href="/dashboard">Back to Tickets</a>
+
+    <br><br>
+
+    {% if inventory_items %}
+        <table class="ticket-table">
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Update Quantity</th>
+                <th>Delete</th>
+            </tr>
+
+            {% for item in inventory_items %}
+            <tr>
+                <td>{{ item.item_name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                    <form method="POST" action="/update-inventory/{{ item.id }}">
+                        <input type="number"
+                               name="quantity"
+                               value="{{ item.quantity }}">
+                        <button type="submit">Update</button>
+                    </form>
+                </td>
+
+
+                <td>
+                    <form method="POST" action="/delete-inventory/{{ item.id }}">
+                        <button type="submit"
+                        onclick="return confirm('Delete this inventory item?');">
+                        Delete</button>
+                    </form>
+                </td>
+            
+                
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No inventory items yet.</p>
+    {% endif %}
+
+</body>
+</html>

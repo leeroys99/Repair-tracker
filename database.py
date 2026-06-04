@@ -4,6 +4,7 @@ connection = sqlite3.connect("tickets.db")
 
 cursor = connection.cursor()
 
+
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS tickets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -21,6 +22,7 @@ CREATE TABLE IF NOT EXISTS tickets (
 )
 """)
 
+
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS quote_requests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,6 +33,17 @@ CREATE TABLE IF NOT EXISTS quote_requests (
     issue TEXT NOT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     status TEXT DEFAULT 'New Request'
+)
+""")
+
+#INVENTORY TABLE#
+
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS inventory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    item_name TEXT NOT NULL,
+    quantity INTEGER DEFAULT 0
 )
 """)
 
