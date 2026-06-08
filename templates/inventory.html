@@ -9,6 +9,7 @@
 
     <h1>Lee's Inventory</h1>
 
+    <h2>Add Inventory:</h2>
 
     <form method="POST" action="/add-inventory">
 
@@ -28,12 +29,14 @@
 </form>
 
 
-    <a href="/dashboard">Back to Tickets</a>
+    <a class="back-to-tickets" href="/tickets">Back to Tickets</a>
 
     <br><br>
 
+    <h2 class="inventory-title">Current Inventory</h2>
+
     {% if inventory_items %}
-        <table class="ticket-table">
+        <table class="inventory-table">
             <tr>
                 <th>Item</th>
                 <th>Quantity</th>

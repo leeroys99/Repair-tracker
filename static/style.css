@@ -91,8 +91,7 @@ p {
 .ticket-table {
     width: 100%;
     max-width: 900px;
-    border-collapse: collapse;
-    margin-top: 20px;
+    margin-LEFT: 0;
     background-color: #101010;
     border: 1px solid #0099ff;
 }
@@ -100,7 +99,7 @@ p {
 .ticket-table th,
 .ticket-table td {
     padding: 16px 18px;
-    vertical-align: middle;
+
 }
 
 .ticket-table th {
@@ -123,7 +122,16 @@ p {
 }
 
 
-/*TABLE FORMAT/CENTER*/
+/*SEARCH BAR*/
+.search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+
+/*TICKET TABLE FORMAT/CENTER*/
 /*PHONE# SPACING*/
 
 
@@ -242,4 +250,59 @@ th:nth-child(6) {
 
 #quoteForm.show {
     display: block;
+}
+
+
+/*QUOTE AND INVENTORY TABLE CENTERING*/
+table {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: center;
+    padding: 10px;
+}
+
+.dashboard-table,
+.inventory-table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    max-width: 900px;
+    border-collapse: collapse;
+    border: 1px solid #0099ff;
+    background-color: #101010;
+}
+
+
+/*BACK TO TICKETS BUTTON*/
+.back-to-tickets {
+    display: inline-block;
+    margin-top: 12px;
+    margin-bottom: 25px;
+}
+
+
+/*INVENTORY TABLE TITLE*/
+.inventory-title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: #0099ff;
+}
+
+
+/*CLEAR BUTTON*/
+.search-bar button,
+.clear-button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0099ff;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
 }

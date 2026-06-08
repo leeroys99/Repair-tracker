@@ -7,9 +7,20 @@ app = Flask(__name__)
 
 print("Current Folder:", os.getcwd())
 
+#URL#
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("home.html")
+
+@app.route("/tickets")
+def tickets():
+    conn = sqlite3.connect("tickets.db")
+    conn.row_factory = sqlite3.Row
+    tickets = conn.execute("SELECT * FROM tickets").fetchall()
+    quote_requests = conn.execute("SELECT * FROM quote_requests").fetchall()
+    conn.close()
+    
+    return render_template("dashboard.html", tickets=tickets, quote_requests=quote_requests)
 
 
 #SEARCHTICKET#

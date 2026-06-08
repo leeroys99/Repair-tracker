@@ -39,18 +39,11 @@
     <h2>Active Repair Tickets</h2>
 
 
-<form method="GET" action="/dashboard">
-    <input type="text" name="search" placeholder="Search tickets..." value="{{ search }}">
+<form class="search-bar" method="GET" action="/tickets">
+    <input type="text" name="search" placeholder="Search tickets...">
     <button type="submit">Search</button>
+    <a href="/tickets" class="clear-button">Clear</a>
 </form>
-
-
-    <!-- SEARCH BUTTON -->
-
-
-<a href="/dashboard">
-    <button>Clear</button>
-</a>
 
 
 {% if search %}
