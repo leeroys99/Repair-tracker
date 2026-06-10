@@ -1,6 +1,4 @@
 /* FONT STYLE*/
-
-
 h1, h2 {
     font-family: 'Orbitron', sans-serif;
 }
@@ -11,8 +9,6 @@ body {
 
 
 /* DASHBOARD BUTTON */
-
-
 .top-nav {
     display: flex;
     justify-content: flex-end;
@@ -21,8 +17,6 @@ body {
 
 
 /* PAGE COLORS*/
-
-
 body {
     background-color: #0a0a0a;
     color: white;
@@ -64,8 +58,6 @@ p {
 
 
 /* HOMEPAGE SECTIONS */
-
-
 .hero-section,
 .home-section {
     background-color: #101010;
@@ -86,8 +78,6 @@ p {
 
 
 /* TICKET TABLE*/
-
-
 .ticket-table {
     width: 100%;
     max-width: 900px;
@@ -133,8 +123,6 @@ p {
 
 /*TICKET TABLE FORMAT/CENTER*/
 /*PHONE# SPACING*/
-
-
 .ticket-table th:nth-child(3),
 .ticket-table td:nth-child(3) {
     min-width: 130px;
@@ -152,16 +140,12 @@ th:nth-child(6) {
 
 
 /*DELETE BUTTON AREA*/
-
-
 .delete-form {
     margin-top: 15px;
 }
 
 
 /*STATUS COLOR*/
-
-
 .status {
     padding: 6px 10px;
     border-radius: 20px;
@@ -201,8 +185,6 @@ th:nth-child(6) {
 
 
 /*AUTHORIZED ACCESS NOTIF*/
-
-
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -311,4 +293,40 @@ th, td {
     text-decoration: none;
     cursor: pointer;
     font-size: 14px;
+}
+
+
+/*LOGOUT BUTTON*/
+.logout-button {
+    display: inline-block;
+    margin-left: 10px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background-color: #cc3333;
+    color: white;
+    text-decoration: none;
+}
+
+
+.dashboard-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.nav-button,
+.logout-button {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-button {
+    background-color: #0099ff;
+}
+
+.logout-button {
+    background-color: #cc3333;
 }

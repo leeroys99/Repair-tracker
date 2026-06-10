@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, session
-from datetime import datetime
+from datetime import timedelta
 import sqlite3
 import os
 
 app = Flask(__name__)
 
 app.secret_key = "temorary_secret_key"
+
+app.permanent_session_lifetime = timedelta(minutes=60)
 
 print("Current Folder:", os.getcwd())
 
@@ -32,8 +34,6 @@ def tickets():
 
 
 #SEARCHTICKET#
-
-
 @app.route("/dashboard")
 def dashboard():
     search = request.args.get("search", "")
@@ -66,9 +66,7 @@ def dashboard():
     return render_template("dashboard.html", tickets=tickets, quote_requests=quote_requests, search=search)
 
 
-	#TICKETTABLE#
-
-
+#TICKETTABLE#
 @app.route("/create", methods=["GET", "POST"])
 def create():
     if request.method == "POST":
@@ -125,8 +123,6 @@ def create():
 
 
 #TICKETID#
-
-
 @app.route("/ticket/<int:ticket_id>")
 def ticket_detail(ticket_id):
 	connection = sqlite3.connect("tickets.db")
@@ -143,8 +139,6 @@ def ticket_detail(ticket_id):
 
 
 #TECH:EDIT TICKET#
-
-
 @app.route("/ticket/<int:ticket_id>/edit", methods=["GET", "POST"])
 def edit_ticket(ticket_id):
     connection = sqlite3.connect("tickets.db")
@@ -197,8 +191,6 @@ def edit_ticket(ticket_id):
 
 
 #DELETE BUTTON#
-
-
 @app.route("/ticket/<int:ticket_id>/delete", methods=["POST"])
 def delete_ticket(ticket_id):
     connection = sqlite3.connect("tickets.db")
@@ -213,8 +205,6 @@ def delete_ticket(ticket_id):
 
 
 #PRINT BUTTON#
-
-
 @app.route("/ticket/<int:ticket_id>/print")
 def print_ticket(ticket_id):
     connection = sqlite3.connect("tickets.db")
@@ -230,8 +220,6 @@ def print_ticket(ticket_id):
 
 
 #CUSTOMER REQUEST#
-
-
 @app.route("/quote-request", methods=["POST"])
 def quote_request():
     customer_name = request.form["customer_name"]
@@ -276,8 +264,6 @@ def quote_request():
 
 
 #QUOTE TABLE#
-
-
 @app.route("/quote/<int:quote_id>")
 def quote_detail(quote_id):
     connection = sqlite3.connect("tickets.db")
@@ -293,8 +279,6 @@ def quote_detail(quote_id):
 
 
 #QUOTE TO TICKET#
-
-
 @app.route("/convert-quote/<int:quote_id>", methods=["POST"])
 def convert_quote(quote_id):
 
@@ -412,20 +396,32 @@ def delete_inventory(item_id):
 
     return redirect("/inventory")
 
+
 #LOGIN ROUTE AND PW#
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if session.get("logged_in"):
+        return redirect("/tickets")
+    
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
         if username == "admin" and password == "password123":
+            session.permanent = True
             session["logged_in"] = True
             return redirect("/tickets")
         else:
             return render_template("login.html", error="Invalid username or password")
 
     return render_template("login.html")
+
+
+#LOGOUT ROUTE#
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
 
 
 if __name__ == "__main__":

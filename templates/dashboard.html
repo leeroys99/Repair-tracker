@@ -29,7 +29,10 @@
     </div>
 </div>
 
-<a class="back-link" href="/">Back to Home</a>
+<div class="dashboard-nav">
+    <a class="nav-button" href="/">Back to Home</a>
+    <a class="logout-button" href="/logout">Logout</a>
+</div>
 
 
     <h1 style="color:rgb(10, 235, 85);"> Leeroy's Repair Tracker!</h1>
@@ -55,8 +58,6 @@
 
 
     <!-- TICKET TABLE/HEADERS -->
-
-
 {% if tickets %}
 <table class="ticket-table">
     <tr>
@@ -97,13 +98,10 @@
     <a href="/create"><button class="create-button">Create New Ticket</button></a>
 
     <!-- INVENTORY -->
-     
      <a href="/inventory"><button>Inventory</button></a>
 
 
     <!-- TICKET/QUOTE SUBMIT -->
-
-
 <h2>Quote/Ticket Requests</h2>
 
 {% if quote_requests %}
