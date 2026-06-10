@@ -1,19 +1,27 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from datetime import datetime
 import sqlite3
 import os
 
 app = Flask(__name__)
 
+app.secret_key = "temorary_secret_key"
+
 print("Current Folder:", os.getcwd())
+
 
 #URL#
 @app.route("/")
 def home():
     return render_template("home.html")
 
+
+#TICKET ROUTE#
 @app.route("/tickets")
 def tickets():
+    if "logged_in" not in session:
+        return redirect("/login")
+    
     conn = sqlite3.connect("tickets.db")
     conn.row_factory = sqlite3.Row
     tickets = conn.execute("SELECT * FROM tickets").fetchall()
@@ -403,6 +411,21 @@ def delete_inventory(item_id):
     connection.close()
 
     return redirect("/inventory")
+
+#LOGIN ROUTE AND PW#
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        if username == "admin" and password == "password123":
+            session["logged_in"] = True
+            return redirect("/tickets")
+        else:
+            return render_template("login.html", error="Invalid username or password")
+
+    return render_template("login.html")
 
 
 if __name__ == "__main__":

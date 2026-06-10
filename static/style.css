@@ -243,6 +243,12 @@ th:nth-child(6) {
 }
 
 
+/*STATUS COLUMN CENTERING*/
+.status-column {
+    text-align: center;
+}
+
+
 /*DROP DOWN/QUOTE*/
 #quoteForm {
     display: none;

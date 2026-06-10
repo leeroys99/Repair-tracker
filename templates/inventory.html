@@ -40,6 +40,7 @@
             <tr>
                 <th>Item</th>
                 <th>Quantity</th>
+                <th>Status</th>
                 <th>Update Quantity</th>
                 <th>Delete</th>
             </tr>
@@ -48,6 +49,17 @@
             <tr>
                 <td>{{ item.item_name }}</td>
                 <td>{{ item.quantity }}</td>
+
+                <td class="status-column">
+                    {% if item.quantity == 0 %}
+                        🔴 Out of Stock
+                    {% elif item.quantity <= 2 %}
+                        🟡 Low Stock
+                    {% else %}
+                        🟢 In Stock
+                    {% endif %}
+                </td>
+
                 <td>
                     <form method="POST" action="/update-inventory/{{ item.id }}">
                         <input type="number"
