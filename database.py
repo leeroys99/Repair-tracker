@@ -19,7 +19,8 @@ CREATE TABLE IF NOT EXISTS tickets (
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
     parts_cost REAL DEFAULT 0,
     labor_cost REAL DEFAULT 0,
-    total_cost REAL DEFAULT 0
+    total_cost REAL DEFAULT 0,
+    damage_photo TEXT
 )
 """)
 
@@ -34,7 +35,8 @@ CREATE TABLE IF NOT EXISTS quote_requests (
     device_type TEXT NOT NULL,
     issue TEXT NOT NULL,
     created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    status TEXT DEFAULT 'New Request'
+    status TEXT DEFAULT 'New Request',
+    damage_photo TEXT
 )
 """)
 

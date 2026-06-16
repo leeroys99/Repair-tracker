@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Repair Status</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <h1>Repair Status</h1>
+
+    {% if ticket %}
+
+        <section class="home-section">
+            <h2>Ticket #{{ ticket.id }}</h2>
+
+            <p><strong>Customer:</strong> {{ ticket.customer_name }}</p>
+            <p><strong>Device:</strong> {{ ticket.device_type }}</p>
+            <p><strong>Status:</strong> {{ ticket.status }}</p>
+            <p><strong>Created:</strong> {{ ticket.created_at }}</p>
+        </section>
+
+    {% else %}
+
+        <section class="home-section">
+            <h2>No Ticket Found</h2>
+            <p>
+                We could not find a repair ticket with that ticket number and phone number.
+                Please check your information and try again.
+            </p>
+        </section>
+
+    {% endif %}
+
+    <a href="/">Back to Home</a>
+
+</body>
+</html>

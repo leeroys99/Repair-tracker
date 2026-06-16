@@ -37,6 +37,38 @@
 
     <h1 style="color:rgb(10, 235, 85);"> Leeroy's Repair Tracker!</h1>
 
+
+<!-- TICKET STATS-->
+     <div class="stats-container">
+
+    <div class="stat-card">
+        <h3>Total Active Tickets:</h3>
+        <p>{{ active_ticket_count }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Needs Diagnostics:</h3>
+        <p>{{ needs_diagnostics_count }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Awaiting Parts:</h3>
+        <p>{{ waiting_parts_count }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Quote/Ticket Requests:</h3>
+        <p>{{ quote_request_count }}</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Low Stock Items:</h3>
+        <p>{{ low_stock_count }}</p>
+    </div>
+
+</div>
+
+
     <hr>
 
     <h2>Active Repair Tickets</h2>
@@ -97,8 +129,9 @@
 
     <a href="/create"><button class="create-button">Create New Ticket</button></a>
 
+
     <!-- INVENTORY -->
-     <a href="/inventory"><button>Inventory</button></a>
+     <a href="/inventory"><button>Check Inventory</button></a>
 
 
     <!-- TICKET/QUOTE SUBMIT -->
@@ -127,6 +160,8 @@
         <td>{{ request.status }}</td>
         <td>{{ request.created_at }}</td>
         <td><a href="/quote/{{ request.id }}">View</a></td>
+
+
     </tr>
     {% endfor %}
 </table>

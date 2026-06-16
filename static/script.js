@@ -1,4 +1,4 @@
-//QUOTE FORM
+//QUOTE BUTTON/FORM
 document.addEventListener("DOMContentLoaded", function () {
     const quoteBtn = document.getElementById("quoteBtn");
     const quoteForm = document.getElementById("quoteForm");

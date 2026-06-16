@@ -36,7 +36,7 @@
     <button id="quoteBtn" type="button">Need a Quick Quote?</button>
     <div id="quoteForm">
 
-    <form method="POST" action="/quote-request">
+    <form method="POST" action="/quote-request" enctype="multipart/form-data">
 
     <p>Tell us what device you have and what's wrong. We'll review the issue
         and call back with a possible quote.</p>
@@ -51,6 +51,8 @@
 
     <p>What’s going on?: <textarea name="issue" rows="5" required></textarea></p>
 
+    <p>Upload Photo of Damage: <input type="file" name="damage_photo" accept="image/*"></p>
+
 
     <button type="submit">Submit Quote Request</button>
 
@@ -59,6 +61,25 @@
 
 </div>
 
+</section>
+
+
+<!-- CUSTOMER STATUS CHECK-->
+<section class="home-section">
+    <h2>Check Repair Status</h2>
+
+    <p>
+        Already dropped off a device? Enter your ticket number and phone number
+        to check the current repair status.
+    </p>
+
+    <form method="POST" action="/status-lookup">
+        <p>Ticket Number: <input type="number" name="ticket_id" required></p>
+
+        <p>Phone Number: <input type="text" name="customer_phone" required></p>
+
+        <button type="submit">Check Status</button>
+    </form>
 </section>
 
 

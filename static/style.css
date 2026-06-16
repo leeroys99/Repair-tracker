@@ -330,3 +330,32 @@ th, td {
 .logout-button {
     background-color: #cc3333;
 }
+
+
+/*REPAIR STATS*/
+.stats-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin: 25px 0;
+}
+
+.stat-card {
+    background-color: #101010;
+    border: 1px solid #0099ff;
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 150px;
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: #00ffcc;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}

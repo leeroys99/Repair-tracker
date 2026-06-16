@@ -5,8 +5,13 @@ import os
 
 app = Flask(__name__)
 
+#CUSTOMER PHOTO#
+UPLOAD_FOLDER = "static/uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
 app.secret_key = "temorary_secret_key"
 
+#LOGIN TIME#
 app.permanent_session_lifetime = timedelta(minutes=60)
 
 print("Current Folder:", os.getcwd())
@@ -28,9 +33,40 @@ def tickets():
     conn.row_factory = sqlite3.Row
     tickets = conn.execute("SELECT * FROM tickets").fetchall()
     quote_requests = conn.execute("SELECT * FROM quote_requests").fetchall()
+    active_ticket_count = conn.execute(
+        "SELECT COUNT(*) FROM tickets"
+
+#TICKET STATS#
+).fetchone()[0]
+
+    needs_diagnostics_count = conn.execute(
+        "SELECT COUNT(*) FROM tickets WHERE status = 'Needs Diagnostics'"
+    ).fetchone()[0]
+
+    waiting_parts_count = conn.execute(
+        "SELECT COUNT(*) FROM tickets WHERE status = 'Waiting on Parts'"
+    ).fetchone()[0]
+
+    quote_request_count = conn.execute(
+        "SELECT COUNT(*) FROM quote_requests"
+    ).fetchone()[0]
+
+    low_stock_count = conn.execute(
+        "SELECT COUNT(*) FROM inventory WHERE quantity <= 2"
+    ).fetchone()[0]
+
     conn.close()
-    
-    return render_template("dashboard.html", tickets=tickets, quote_requests=quote_requests)
+
+    return render_template(
+        "dashboard.html", 
+        tickets=tickets, 
+        quote_requests=quote_requests,
+        active_ticket_count=active_ticket_count,
+        needs_diagnostics_count=needs_diagnostics_count,
+        waiting_parts_count=waiting_parts_count,
+        quote_request_count=quote_request_count,
+        low_stock_count=low_stock_count
+    )
 
 
 #SEARCHTICKET#
@@ -219,7 +255,7 @@ def print_ticket(ticket_id):
     return render_template("print.html", ticket=ticket)
 
 
-#CUSTOMER REQUEST#
+#CUSTOMER QUOTE/TICKET REQUEST#
 @app.route("/quote-request", methods=["POST"])
 def quote_request():
     customer_name = request.form["customer_name"]
@@ -227,11 +263,17 @@ def quote_request():
     customer_email = request.form["customer_email"]
     device_type = request.form["device_type"]
     issue = request.form["issue"]
+    photo = request.files.get("damage_photo")
+    filename = None
 
     customer_phone = customer_phone.replace("-", "").replace(" ", "")
 
     if len(customer_phone) == 10 and customer_phone.isdigit():
         customer_phone = f"{customer_phone[:3]}-{customer_phone[3:6]}-{customer_phone[6:]}"
+        
+    if photo and photo.filename != "":
+        filename = photo.filename
+        photo.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
 
     connection = sqlite3.connect("tickets.db")
     cursor = connection.cursor()
@@ -242,15 +284,17 @@ def quote_request():
         customer_phone,
         customer_email,
         device_type,
-        issue
+        issue,
+        damage_photo
     )
-    VALUES (?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?)
     """, (
         customer_name,
         customer_phone,
         customer_email,
         device_type,
-        issue
+        issue,
+        filename
     ))
 
     connection.commit()
@@ -261,6 +305,30 @@ def quote_request():
     <p>Thank you! We'll review your request and call you back with a possible quote.</p>
     <a href="/">Back to Home</a>
     """
+    
+    
+#CUSTOMER STATUS CHECK#
+@app.route("/status-lookup", methods=["POST"])
+def status_lookup():
+    ticket_id = request.form["ticket_id"]
+    customer_phone = request.form["customer_phone"]
+
+    customer_phone = customer_phone.replace("-", "").replace(" ", "")
+
+    if len(customer_phone) == 10 and customer_phone.isdigit():
+        customer_phone = f"{customer_phone[:3]}-{customer_phone[3:6]}-{customer_phone[6:]}"
+
+    conn = sqlite3.connect("tickets.db")
+    conn.row_factory = sqlite3.Row
+
+    ticket = conn.execute(
+        "SELECT * FROM tickets WHERE id = ? AND customer_phone = ?",
+        (ticket_id, customer_phone)
+    ).fetchone()
+
+    conn.close()
+
+    return render_template("status_result.html", ticket=ticket)
 
 
 #QUOTE TABLE#
@@ -297,9 +365,10 @@ def convert_quote(quote_id):
         device_type,
         issue,
         technician_notes,
-        status
+        status,
+        damage_photo
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         quote["customer_name"],
         quote["customer_phone"],
@@ -307,7 +376,8 @@ def convert_quote(quote_id):
         quote["device_type"],
         quote["issue"],
         "",
-        "Needs Diagnostics"
+        "Needs Diagnostics",
+        quote["damage_photo"]
     ))
     
     cursor.execute("DELETE FROM quote_requests WHERE id = ?", (quote_id,))

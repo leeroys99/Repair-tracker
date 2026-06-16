@@ -19,12 +19,20 @@
     <h2>Problem Description</h2>
     <p>{{ quote.issue }}</p>
 
+    <h2>Uploaded Photo</h2>
+
+    {% if quote.damage_photo %}
+        <img src="{{ url_for('static', filename='uploads/' + quote.damage_photo) }}" width="300">
+    {% else %}
+        <p>No photo uploaded.</p>
+    {% endif %}
+
     <form method="POST" action="/convert-quote/{{ quote.id }}">
     <button type="submit">Create Repair Ticket</button></form>
 
     <br>
 
-    <a href="/dashboard"><button>Back to Tickets</button></a>
+    <a href="/tickets"><button>Back to Tickets</button></a>
 
 </body>
 </html>
