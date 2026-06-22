@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Repair Status</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block content %}
 
     <h1>Repair Status</h1>
 
@@ -34,5 +29,4 @@
 
     <a href="/">Back to Home</a>
 
-</body>
-</html>
+{% endblock %}

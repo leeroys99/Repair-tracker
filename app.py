@@ -5,25 +5,35 @@ import os
 
 app = Flask(__name__)
 
+
+# =========================
 #CUSTOMER PHOTO#
+# =========================
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 app.secret_key = "temorary_secret_key"
 
+
+# =========================
 #LOGIN TIME#
+# =========================
 app.permanent_session_lifetime = timedelta(minutes=60)
 
 print("Current Folder:", os.getcwd())
 
 
+# =========================
 #URL#
+# =========================
 @app.route("/")
 def home():
     return render_template("home.html")
 
 
+# =========================
 #TICKET ROUTE#
+# =========================
 @app.route("/tickets")
 def tickets():
     if "logged_in" not in session:
@@ -33,10 +43,13 @@ def tickets():
     conn.row_factory = sqlite3.Row
     tickets = conn.execute("SELECT * FROM tickets").fetchall()
     quote_requests = conn.execute("SELECT * FROM quote_requests").fetchall()
+    
+    
+# =========================
+#TICKET STATS#
+# =========================
     active_ticket_count = conn.execute(
         "SELECT COUNT(*) FROM tickets"
-
-#TICKET STATS#
 ).fetchone()[0]
 
     needs_diagnostics_count = conn.execute(
@@ -69,7 +82,9 @@ def tickets():
     )
 
 
+# =========================
 #SEARCHTICKET#
+# =========================
 @app.route("/dashboard")
 def dashboard():
     search = request.args.get("search", "")
@@ -102,7 +117,9 @@ def dashboard():
     return render_template("dashboard.html", tickets=tickets, quote_requests=quote_requests, search=search)
 
 
+# =========================
 #TICKETTABLE#
+# =========================
 @app.route("/create", methods=["GET", "POST"])
 def create():
     if request.method == "POST":
@@ -158,7 +175,9 @@ def create():
     return render_template("create.html")
 
 
+# =========================
 #TICKETID#
+# =========================
 @app.route("/ticket/<int:ticket_id>")
 def ticket_detail(ticket_id):
 	connection = sqlite3.connect("tickets.db")
@@ -174,7 +193,9 @@ def ticket_detail(ticket_id):
 	return render_template("ticket.html", ticket=ticket)
 
 
+# =========================
 #TECH:EDIT TICKET#
+# =========================
 @app.route("/ticket/<int:ticket_id>/edit", methods=["GET", "POST"])
 def edit_ticket(ticket_id):
     connection = sqlite3.connect("tickets.db")
@@ -226,7 +247,9 @@ def edit_ticket(ticket_id):
     return render_template("edit.html", ticket=ticket)
 
 
+# =========================
 #DELETE BUTTON#
+# =========================
 @app.route("/ticket/<int:ticket_id>/delete", methods=["POST"])
 def delete_ticket(ticket_id):
     connection = sqlite3.connect("tickets.db")
@@ -240,7 +263,9 @@ def delete_ticket(ticket_id):
     return redirect("/dashboard")
 
 
+# =========================
 #PRINT BUTTON#
+# =========================
 @app.route("/ticket/<int:ticket_id>/print")
 def print_ticket(ticket_id):
     connection = sqlite3.connect("tickets.db")
@@ -255,7 +280,9 @@ def print_ticket(ticket_id):
     return render_template("print.html", ticket=ticket)
 
 
+# =========================
 #CUSTOMER QUOTE/TICKET REQUEST#
+# =========================
 @app.route("/quote-request", methods=["POST"])
 def quote_request():
     customer_name = request.form["customer_name"]
@@ -306,8 +333,10 @@ def quote_request():
     <a href="/">Back to Home</a>
     """
     
-    
+
+# =========================
 #CUSTOMER STATUS CHECK#
+# =========================
 @app.route("/status-lookup", methods=["POST"])
 def status_lookup():
     ticket_id = request.form["ticket_id"]
@@ -331,7 +360,9 @@ def status_lookup():
     return render_template("status_result.html", ticket=ticket)
 
 
+# =========================
 #QUOTE TABLE#
+# =========================
 @app.route("/quote/<int:quote_id>")
 def quote_detail(quote_id):
     connection = sqlite3.connect("tickets.db")
@@ -346,7 +377,9 @@ def quote_detail(quote_id):
     return render_template("quote.html", quote=quote)
 
 
+# =========================
 #QUOTE TO TICKET#
+# =========================
 @app.route("/convert-quote/<int:quote_id>", methods=["POST"])
 def convert_quote(quote_id):
 
@@ -388,7 +421,9 @@ def convert_quote(quote_id):
     return redirect("/dashboard")
 
 
+# =========================
 #INVENTORY#
+# =========================
 @app.route("/inventory")
 def inventory():
     connection = sqlite3.connect("tickets.db")
@@ -403,7 +438,9 @@ def inventory():
     return render_template("inventory.html", inventory_items=inventory_items)
 
 
+# =========================
 #INVENTORY ADD#
+# =========================
 @app.route("/add-inventory", methods=["POST"])
 def add_inventory():
 
@@ -430,7 +467,9 @@ def add_inventory():
     return redirect("/inventory")
 
 
+# =========================
 #INVENTORY UPDATE#
+# =========================
 @app.route("/update-inventory/<int:item_id>", methods=["POST"])
 def update_inventory(item_id):
     quantity = int(request.form["quantity"])
@@ -453,7 +492,9 @@ def update_inventory(item_id):
     return redirect("/inventory")
 
 
+# =========================
 #DELETE INVENTORY#
+# =========================
 @app.route("/delete-inventory/<int:item_id>", methods=["POST"])
 def delete_inventory(item_id):
     connection = sqlite3.connect("tickets.db")
@@ -467,7 +508,9 @@ def delete_inventory(item_id):
     return redirect("/inventory")
 
 
+# =========================
 #LOGIN ROUTE AND PW#
+# =========================
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("logged_in"):
@@ -477,9 +520,22 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        if username == "admin" and password == "password123":
+        conn = sqlite3.connect("tickets.db")
+        conn.row_factory = sqlite3.Row
+
+        technician = conn.execute(
+            "SELECT * FROM technicians WHERE username = ? AND password = ?",
+            (username, password)
+        ).fetchone()
+
+        conn.close()
+
+        if technician:
             session.permanent = True
             session["logged_in"] = True
+            session["username"] = technician["username"]
+            session["role"] = technician["role"]
+        
             return redirect("/tickets")
         else:
             return render_template("login.html", error="Invalid username or password")
@@ -487,11 +543,45 @@ def login():
     return render_template("login.html")
 
 
+# =========================
 #LOGOUT ROUTE#
+# =========================
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/login")
+
+
+# =========================
+#CREATE TECHNICIAN#
+# =========================
+@app.route("/create-technician", methods=["GET", "POST"])
+def create_technician():
+    if "logged_in" not in session:
+        return redirect("/login")
+
+    if session.get("role") != "admin":
+        return redirect("/tickets")
+    
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        role = "admin" if request.form.get("is_admin") else "tech"
+
+        conn = sqlite3.connect("tickets.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            INSERT INTO technicians (username, password, role)
+            VALUES (?, ?, ?)
+        """, (username, password, role))
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/tickets")
+
+    return render_template("create_technician.html")
 
 
 if __name__ == "__main__":

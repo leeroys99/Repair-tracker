@@ -31,6 +31,13 @@
 
 <div class="dashboard-nav">
     <a class="nav-button" href="/">Back to Home</a>
+
+{% if session.get("role") == "admin" %}
+    <a class="logout-button" href="/create-technician"> <!--ROLE = ONLY ADMIN,NO TECHS-->
+        Create Technician
+    </a>
+{% endif %}
+
     <a class="logout-button" href="/logout">Logout</a>
 </div>
 
@@ -169,9 +176,8 @@
 <p>No quote requests yet.</p>
 {% endif %}
 
+<!-- LOGIN TIMER -->
 <script>
-
-
   const accessModal = document.getElementById("access-modal");
     const accessTime = localStorage.getItem("accessGrantedTime");
     const currentTime = new Date().getTime();

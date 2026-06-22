@@ -50,7 +50,20 @@ CREATE TABLE IF NOT EXISTS inventory (
 )
 """)
 
+
+#TECHNICIAN ACCOUNTS#
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS technicians (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'tech'
+)
+""")
+
+
 connection.commit()
 connection.close()
 
 print("Database created successfully!")
+

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Create Technician Account</h1>
+
+<form method="POST" action="/create-technician">
+    <p>Username: <input type="text" name="username" required></p>
+
+    <p>Password: <input type="password" name="password" required></p>
+
+    <p>
+        <label>
+            <input type="checkbox" name="is_admin">
+            Give admin abilities
+        </label>
+    </p>
+
+    <button type="submit">Create Technician</button>
+</form>
+
+<br>
+
+<a href="/tickets">Back to Dashboard</a>
+
+{% endblock %}

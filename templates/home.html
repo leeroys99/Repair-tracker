@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Leeroy's Repair</title>
-</head>
-
-
-<body>
+{% block content %}
 
 
 <div class="top-nav">
@@ -115,6 +108,4 @@
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 
-</body>
-
-</html>
+{% endblock %}

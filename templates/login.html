@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Technician Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% extends "base.html" %}
 
-<body>
+{% block content %}
 
     <h1>Technician Login</h1>
 
@@ -50,5 +45,4 @@
     }
     </script>
 
-</body>
-</html>
+{% endblock %}
