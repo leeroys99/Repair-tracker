@@ -88,34 +88,42 @@ def tickets():
 @app.route("/dashboard")
 def dashboard():
     search = request.args.get("search", "")
+	status_filter = request.args.get("status", "")
 
     connection = sqlite3.connect("tickets.db")
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
 
-    if search:
-        cursor.execute("""
-        SELECT * FROM tickets
-        WHERE customer_name LIKE ?
+query = "SELECT * FROM tickets WHERE 1=1"
+params = []
+
+if search:
+    query += """ AND (
+        customer_name LIKE ?
         OR device_type LIKE ?
         OR status LIKE ?
-        """, (
-            "%" + search + "%",
-            "%" + search + "%",
-            "%" + search + "%"
-        ))
-    else:
-        cursor.execute("SELECT * FROM tickets")
+    )"""
+    params.extend(["%" + search + "%"] * 3)
 
-    tickets = cursor.fetchall()
+if status_filter:
+    query += " AND status = ?"
+    params.append(status_filter)
+
+cursor.execute(query, params)
+tickets = cursor.fetchall()
     
     cursor.execute("SELECT * FROM quote_requests ORDER BY id DESC")
     quote_requests = cursor.fetchall()
     
     connection.close()
 
-    return render_template("dashboard.html", tickets=tickets, quote_requests=quote_requests, search=search)
-
+return render_template(
+    "dashboard.html",
+    tickets=tickets,
+    quote_requests=quote_requests,
+    search=search,
+    status_filter=status_filter
+)
 
 # =========================
 #TICKETTABLE#
