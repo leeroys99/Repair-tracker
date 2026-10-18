@@ -117,12 +117,12 @@
         <td>{{ ticket.customer_phone }}</td>
         <td>{{ ticket.device_type }}</td>
         <td>
-            <span class="status {{ ticket.status|lower|replace(' ', '-') }}">
+    <span class="status {{ ticket.status|lower|replace(' ', '-') }}">
         {{ ticket.status }}
-        <td>{{ ticket.created_at }}</td>
-        <td>${{ "%.2f"|format(ticket.total_cost) }}</td>
     </span>
 </td>
+<td>{{ ticket.created_at }}</td>
+<td>${{ "%.2f"|format(ticket.total_cost) }}</td>
         <td>
             <a class="view-button" href="/ticket/{{ ticket.id }}">View</a>
         </td>
