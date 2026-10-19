@@ -79,13 +79,34 @@
     <hr>
 
     <h2>Active Repair Tickets</h2>
+    <!-- SEARCHBOX AND STATUS DROPDOWN-->
 
+<form class="search-bar" method="GET" action="/dashboard">
+    <input type="text" name="search"
+           placeholder="Search tickets..."
+           value="{{ search }}">
 
-<form class="search-bar" method="GET" action="/tickets">
-    <input type="text" name="search" placeholder="Search tickets...">
-    <button type="submit">Search</button>
-    <a href="/tickets" class="clear-button">Clear</a>
+    <select name="status">
+        <option value="">All Statuses</option>
+        {% for status in [
+            "Needs Diagnostics",
+            "Diagnosing",
+            "Waiting on Parts",
+            "Repair in Progress",
+            "Ready for Pickup",
+            "Completed"
+        ] %}
+        <option value="{{ status }}"
+            {% if status_filter == status %}selected{% endif %}>
+            {{ status }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Filter Tickets</button>
+    <a href="/dashboard" class="clear-button">Clear</a>
 </form>
+
 
 
 {% if search %}
@@ -117,12 +138,12 @@
         <td>{{ ticket.customer_phone }}</td>
         <td>{{ ticket.device_type }}</td>
         <td>
-            <span class="status {{ ticket.status|lower|replace(' ', '-') }}">
+    <span class="status {{ ticket.status|lower|replace(' ', '-') }}">
         {{ ticket.status }}
-        <td>{{ ticket.created_at }}</td>
-        <td>${{ "%.2f"|format(ticket.total_cost) }}</td>
     </span>
 </td>
+<td>{{ ticket.created_at }}</td>
+<td>${{ "%.2f"|format(ticket.total_cost) }}</td>
         <td>
             <a class="view-button" href="/ticket/{{ ticket.id }}">View</a>
         </td>

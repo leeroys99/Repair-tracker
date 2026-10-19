@@ -85,36 +85,74 @@ def tickets():
 # =========================
 #SEARCHTICKET#
 # =========================
+
 @app.route("/dashboard")
 def dashboard():
     search = request.args.get("search", "")
+    status_filter = request.args.get("status", "")
 
     connection = sqlite3.connect("tickets.db")
     connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
 
-    if search:
-        cursor.execute("""
-        SELECT * FROM tickets
-        WHERE customer_name LIKE ?
-        OR device_type LIKE ?
-        OR status LIKE ?
-        """, (
-            "%" + search + "%",
-            "%" + search + "%",
-            "%" + search + "%"
-        ))
-    else:
-        cursor.execute("SELECT * FROM tickets")
+    query = "SELECT * FROM tickets WHERE 1=1"
+    params = []
 
+    if search:
+        query += """ AND (
+            customer_name LIKE ?
+            OR device_type LIKE ?
+            OR status LIKE ?
+        )"""
+        params.extend(["%" + search + "%"] * 3)
+
+    if status_filter:
+        query += " AND status = ?"
+        params.append(status_filter)
+
+    cursor.execute(query, params)
     tickets = cursor.fetchall()
-    
+
     cursor.execute("SELECT * FROM quote_requests ORDER BY id DESC")
     quote_requests = cursor.fetchall()
-    
+
+    # Dashboard statistics
+    active_ticket_count = connection.execute(
+        "SELECT COUNT(*) FROM tickets"
+    ).fetchone()[0]
+
+    needs_diagnostics_count = connection.execute(
+        "SELECT COUNT(*) FROM tickets WHERE status = 'Needs Diagnostics'"
+    ).fetchone()[0]
+
+    waiting_parts_count = connection.execute(
+        "SELECT COUNT(*) FROM tickets WHERE status = 'Waiting on Parts'"
+    ).fetchone()[0]
+
+    quote_request_count = connection.execute(
+        "SELECT COUNT(*) FROM quote_requests"
+    ).fetchone()[0]
+
+    low_stock_count = connection.execute(
+        "SELECT COUNT(*) FROM inventory WHERE quantity <= 2"
+    ).fetchone()[0]
+
     connection.close()
 
-    return render_template("dashboard.html", tickets=tickets, quote_requests=quote_requests, search=search)
+
+    return render_template(
+        "dashboard.html",
+        tickets=tickets,
+        quote_requests=quote_requests,
+        search=search,
+        status_filter=status_filter,
+        active_ticket_count=active_ticket_count,
+        needs_diagnostics_count=needs_diagnostics_count,
+        waiting_parts_count=waiting_parts_count,
+        quote_request_count=quote_request_count,
+        low_stock_count=low_stock_count
+    )
+
 
 
 # =========================
