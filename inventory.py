@@ -43,9 +43,7 @@ def delete_item(item_id):
     connection.commit()
     connection.close()
 
+
 # Check if an inventory quantity is valid
 def validate_quantity(quantity):
-    if quantity >= 0:
-        return True
-    else:
-        return False
+    return quantity >= 0
