@@ -198,3 +198,11 @@ def test_validate_quantity():
     assert inventory_db.validate_quantity(5) is True
     assert inventory_db.validate_quantity(0) is True
     assert inventory_db.validate_quantity(-1) is False
+
+
+# Check if an inventory quantity is valid
+def validate_quantity(quantity):
+    if quantity >= 0:
+        return True
+    else:
+        return False
