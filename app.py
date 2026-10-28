@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, session
-from datetime import timedelta
+from datetime import datetime, timedelta
 import sqlite3
 import os
 import inventory as inventory_db
