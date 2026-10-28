@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 from datetime import timedelta
 import sqlite3
 import os
+import inventory as inventory_db
 
 app = Flask(__name__)
 
@@ -426,15 +427,7 @@ def convert_quote(quote_id):
 # =========================
 @app.route("/inventory")
 def inventory():
-    connection = sqlite3.connect("tickets.db")
-    connection.row_factory = sqlite3.Row
-    cursor = connection.cursor()
-
-    cursor.execute("SELECT * FROM inventory")
-    inventory_items = cursor.fetchall()
-
-    connection.close()
-
+    inventory_items = inventory_db.get_inventory()
     return render_template("inventory.html", inventory_items=inventory_items)
 
 
@@ -443,51 +436,22 @@ def inventory():
 # =========================
 @app.route("/add-inventory", methods=["POST"])
 def add_inventory():
-
     item_name = request.form["item_name"]
     quantity = int(request.form["quantity"])
 
-    connection = sqlite3.connect("tickets.db")
-    cursor = connection.cursor()
-
-    cursor.execute("""
-    INSERT INTO inventory (
-        item_name,
-        quantity
-    )
-    VALUES (?, ?)
-    """, (
-        item_name,
-        quantity
-    ))
-
-    connection.commit()
-    connection.close()
+    inventory_db.add_item(item_name, quantity)
 
     return redirect("/inventory")
-
 
 # =========================
 #INVENTORY UPDATE#
 # =========================
+
 @app.route("/update-inventory/<int:item_id>", methods=["POST"])
 def update_inventory(item_id):
     quantity = int(request.form["quantity"])
 
-    connection = sqlite3.connect("tickets.db")
-    cursor = connection.cursor()
-
-    cursor.execute("""
-    UPDATE inventory
-    SET quantity = ?
-    WHERE id = ?
-    """, (
-        quantity,
-        item_id
-    ))
-
-    connection.commit()
-    connection.close()
+    inventory_db.update_item(item_id, quantity)
 
     return redirect("/inventory")
 
@@ -495,17 +459,13 @@ def update_inventory(item_id):
 # =========================
 #DELETE INVENTORY#
 # =========================
+
 @app.route("/delete-inventory/<int:item_id>", methods=["POST"])
 def delete_inventory(item_id):
-    connection = sqlite3.connect("tickets.db")
-    cursor = connection.cursor()
-
-    cursor.execute("DELETE FROM inventory WHERE id = ?", (item_id,))
-
-    connection.commit()
-    connection.close()
+    inventory_db.delete_item(item_id)
 
     return redirect("/inventory")
+
 
 
 # =========================
