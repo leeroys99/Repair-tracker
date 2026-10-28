@@ -191,3 +191,10 @@ def test_add_missing_quantity(client):
         "item_name": "Battery"
     })
     assert response.status_code == 400
+
+
+# Part B: Test inventory quantity validation
+def test_validate_quantity():
+    assert inventory_db.validate_quantity(5) is True
+    assert inventory_db.validate_quantity(0) is True
+    assert inventory_db.validate_quantity(-1) is False
