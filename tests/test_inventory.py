@@ -206,3 +206,24 @@ def validate_quantity(quantity):
         return True
     else:
         return False
+
+
+
+# Part A: Test inventory page using a mocked database function
+def test_mock_inventory(monkeypatch):
+    # Fake inventory data instead of using the real database
+    def fake_get_inventory():
+        return [{"id": 1, "item_name": "iPhone Screen", "quantity": 5}]
+
+    # Replace the real database function
+    monkeypatch.setattr(inventory_db, "get_inventory", fake_get_inventory)
+
+    # Test the inventory page
+    repair_app.app.config["TESTING"] = True
+
+    with repair_app.app.test_client() as client:
+        response = client.get("/inventory")
+
+    # Check that the page displays the fake inventory item
+    assert response.status_code == 200
+    assert b"iPhone Screen" in response.data
