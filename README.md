@@ -1,3 +1,5 @@
+[![Python CI Pipeline](https://github.com/leeroys99/Repair-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/leeroys99/Repair-tracker/actions/workflows/ci.yml)
+
 # Leeroy's Repair Tracker
 
 A repair shop management web application built with Flask, SQLite, HTML, CSS, and JavaScript.
