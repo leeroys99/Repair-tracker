@@ -1,5 +1,5 @@
 
-name: Python Tests
+name: Python CI Pipeline
 
 on:
   push:
@@ -8,9 +8,8 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,9 +24,29 @@ jobs:
           python -m pip install --upgrade pip
           pip install flask pytest pytest-cov
 
-      - name: Run tests with coverage
+      - name: Check Python files
+        run: python -m compileall -q app.py database.py inventory.py tests
+
+  unit-tests:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
         run: |
-          python -m pytest tests/ --cov=app --cov=inventory --cov-report=xml:coverage.xml --cov-report=term
+          python -m pip install --upgrade pip
+          pip install flask pytest pytest-cov
+
+      - name: Run unit tests
+        run: |
+          python -m pytest tests/test_inventory.py tests/test_login.py tests/test_tickets.py --cov=app --cov=inventory --cov-report=xml:coverage.xml --cov-report=term
 
       - name: Upload coverage report
         if: always()
@@ -35,3 +54,24 @@ jobs:
         with:
           name: coverage-report
           path: coverage.xml
+          if-no-files-found: ignore
+
+  integration-tests:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flask pytest pytest-cov
+
+      - name: Run integration tests
+        run: python -m pytest tests/test_integration.py -v
