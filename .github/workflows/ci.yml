@@ -103,10 +103,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-        context: .
-        push: true
-        tags: |
-          ghcr.io/leeroys99/repair-tracker:latest
-          ghcr.io/leeroys99/repair-tracker:${{ github.sha }}
+          context: .
+          push: true
+          tags: |
+            ghcr.io/leeroys99/repair-tracker:latest
+            ghcr.io/leeroys99/repair-tracker:${{ github.sha }}
 
 
