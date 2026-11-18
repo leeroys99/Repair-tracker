@@ -2,9 +2,21 @@ from flask import Flask, render_template, request, redirect, session
 from datetime import datetime, timedelta
 import sqlite3
 import os
+import redis
 import inventory as inventory_db
 
 app = Flask(__name__)
+
+
+@app.route("/redis-check")
+def redis_check():
+    redis_url = os.environ.get("REDIS_URL", "redis://redis:6379/0")
+    try:
+        client = redis.from_url(redis_url)
+        client.ping()
+        return "Redis connection successful!"
+    except redis.RedisError:
+        return "Redis connection failed", 503
 
 
 # =========================
